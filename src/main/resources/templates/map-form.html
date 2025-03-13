@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create or Edit Map</title>
+    <link rel="stylesheet" th:href="@{/css/map-form.css}" />
+</head>
+<body class="dark-theme">
+<div class="container">
+    <h1 th:if="${map.id != null}">Edit Map</h1>
+    <h1 th:if="${map.id == null}">Create Map</h1>
+
+    <form th:action="@{/maps/save}" th:object="${map}" method="post" class="map-form">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="mapTitle">Title:</label>
+            <input type="text" th:field="*{mapTitle}" id="mapTitle" placeholder="Enter map title" required />
+        </div>
+
+        <div class="form-group">
+            <label for="creatorName">Creator Name:</label>
+            <input type="text" th:field="*{creatorName}" id="creatorName" placeholder="Enter creator's name" required />
+        </div>
+
+        <div class="form-group">
+            <label for="mapDescription">Description:</label>
+            <textarea th:field="*{mapDescription}" id="mapDescription" placeholder="Enter map description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="mapImage">Image URL:</label>
+            <input type="text" th:field="*{mapImage}" id="mapImage" placeholder="Enter image URL" />
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" step="0.01" th:field="*{price}" id="price" placeholder="Enter price (0 for free)" required />
+        </div>
+
+        <div class="form-group">
+            <label for="genre">Genre:</label>
+            <select th:field="*{genre}" id="genre">
+                <option value="">Select Genre</option>
+                <option th:each="g : ${T(com.example.Nuna.model.Genre).values()}" th:value="${g}" th:text="${g}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select th:field="*{status}" id="status">
+                <option value="">Select Status</option>
+                <option th:each="s : ${T(com.example.Nuna.model.MapStatus).values()}" th:value="${s}" th:text="${s}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-button">Save</button>
+    </form>
+
+    <a href="/maps" class="back-button">Back to Map List</a>
+</div>
+</body>
+</html>

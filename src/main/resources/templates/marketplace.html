@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/marketplace.css}" />
+</head>
+<body>
+<div class="container">
+    <h1>Marketplace Listings</h1>
+
+    <!-- Check if the marketplace has listings -->
+    <div th:if="${marketplace.listings != null and not #lists.isEmpty(marketplace.listings)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Map Title</th>
+                <th>Genre</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="listing : ${marketplace.listings}">
+                <td th:text="${listing.map.mapTitle}">Map Title</td>
+                <td th:text="${listing.map.genre}">Genre</td>
+                <td th:text="${listing.price}">Price</td>
+                <td>
+                    <form th:action="@{/marketplace/remove/{listingId}(listingId=${listing.id})}" method="post">
+                        <button type="submit">Remove</button>
+                    </form>
+                    <form th:action="@{/marketplace/update}" method="post">
+                        <input type="hidden" name="listingId" th:value="${listing.id}" />
+                        <input type="number" name="newPrice" th:value="${listing.price}" step="0.01" required />
+                        <button type="submit">Update Price</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Marketplace Summary Section -->
+        <div class="marketplace-summary">
+            <h2>Marketplace Summary</h2>
+            <p>Total Listings: <span th:text="${marketplace.listings.size()}">Total</span></p>
+            <p>Total Value: <span th:text="${totalValue}">Total Value</span></p>
+        </div>
+    </div>
+
+    <!-- If the marketplace is empty -->
+    <div th:if="${marketplace.listings == null or #lists.isEmpty(marketplace.listings)}">
+        <p>No listings in the marketplace yet.</p>
+    </div>
+
+    <!-- Form to Add New Map Listing -->
+    <h2>Add a Map to Marketplace</h2>
+    <form th:action="@{/marketplace/add}" method="post">
+        <label for="mapId">Select Map:</label>
+        <select name="mapId" id="mapId" required>
+            <option th:each="map : ${explorer.maps}" th:value="${map.id}" th:text="${map.mapTitle}">Map Title</option>
+        </select>
+
+        <label for="price">Set Price:</label>
+        <input type="number" name="price" id="price" step="0.01" required />
+
+        <button type="submit">Add to Marketplace</button>
+    </form>
+
+    <a href="/explore/maps" class="continue-exploring-button">Continue Exploring Maps</a>
+</div>
+
+</body>
+</html>

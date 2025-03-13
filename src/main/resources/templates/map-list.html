@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Map List</title>
+    <link rel="stylesheet" th:href="@{/css/map-list.css}" />
+
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            padding: 1em 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 10vh;
+            font-family: "Tiny5", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .navbar-logo {
+            font-size: 2em;
+            text-transform: uppercase;
+            color: white;
+            -webkit-animation: glowing-text 1s ease-in-out infinite alternate;
+            -moz-animation: glowing-text 1s ease-in-out infinite alternate;
+            animation: glowing-text 1s ease-in-out infinite alternate;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1em;
+        }
+
+        a {
+            font-weight: 500;
+            font-size: 16px;
+            color: white;
+            text-decoration: inherit;
+            transition: 0.4s ease, text-shadow 0.4s ease-in-out;
+        }
+
+        a:hover {
+            color: #ccc;
+            text-shadow: 0 0 5px #b0b659, 0 0 10px #b65959, 0 0 15px #b66759,
+            0 0 20px #db6034, 0 0 35px #ff2a00, 0 0 40px #db6c34;
+        }
+
+        .container {
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .map-card {
+            background: #f8f8f8;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .map-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .map-details h2 {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .map-actions a {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: white;
+            background: #0073e6;
+            border-radius: 5px;
+        }
+
+        .map-actions .delete-button {
+            background: #e63946;
+        }
+
+        .add-button {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.7rem 1.5rem;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+<div class="navbar">
+    <div class="navbar-logo">Nuna</div>
+    <ul>
+        <li><a th:href="@{/register}">Sign Up</a></li>
+        <li><a th:href="@{/login}">Login</a></li>
+        <li><a th:href="@{/maps}">Explore Maps</a></li>
+        <li><a th:href="@{/}">Home</a></li>
+    </ul>
+</div>
+
+<div class="container">
+    <h1>
+        <span sec:authorize="hasRole('ADMIN')">Admin Page - Manage Maps</span>
+        <span sec:authorize="!hasRole('ADMIN')">Explore Maps</span>
+    </h1>
+    <div class="map-grid">
+        <div th:each="map : ${maps}" class="map-card">
+            <img th:src="${map.mapImage}" th:alt="${map.mapTitle}" />
+            <div class="map-details">
+                <h2 th:text="${map.mapTitle}">Map Title</h2>
+                <p><strong>Genre:</strong> <span th:text="${map.genre}">Genre</span></p>
+                <p><strong>Price:</strong> <span th:text="${map.price}">$0.00</span></p>
+            </div>
+            <div class="map-actions">
+                <a th:href="@{/maps/edit/{id}(id=${map.id})}" class="edit-button">Edit</a>
+                <a th:href="@{/maps/delete/{id}(id=${map.id})}" class="delete-button">Delete</a>
+            </div>
+        </div>
+    </div>
+    <a href="/maps/new" class="add-button">Add New Map</a>
+</div>
+
+</body>
+</html>

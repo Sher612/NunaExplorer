@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ?: 'Nuna - Explore the Art of Cartography'"></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header>
+    <h1>Nuna: Explore the Art of Cartography</h1>
+    <nav>
+        <a th:href="@{/}">Home</a> |
+        <a th:href="@{/maps}">Explore Maps</a> |
+
+        <!-- Show Marketplace tab only for Admins -->
+        <span sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/marketplace}">Marketplace</a> |
+    </span>
+
+        <!-- Show Register/Login if user is NOT authenticated -->
+        <span sec:authorize="!isAuthenticated()">
+        <a th:href="@{/register}">Register</a> |
+        <a th:href="@{/login}">Login</a>
+    </span>
+
+        <!-- Show Logout if user IS authenticated -->
+        <span sec:authorize="isAuthenticated()">
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <button type="submit">Logout</button>
+        </form>
+    </span>
+    </nav>
+</header>
+
+<main>
+    <div th:replace="~{::content}"></div>  <!-- Dynamic content will be inserted here -->
+</main>
+
+<footer>
+    <p>&copy; 2024 Nuna. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

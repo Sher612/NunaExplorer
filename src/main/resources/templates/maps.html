@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maps</title>
+
+    <link rel="stylesheet" th:href="@{/static/maps.css}" />
+</head>
+<body>
+<div class="navbar">
+    <div class="navbar-logo">Nuna</div>
+    <ul>
+        <li><a th:href="@{/register}">Sign Up</a></li>
+        <li><a th:href="@{/login}">Login</a></li>
+        <li><a th:href="@{/maps}">Maps</a></li>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/marketplace}">Marketplace</a></li>
+        <li><a th:href="@{/admin}">Admin</a></li>
+    </ul>
+</div>
+
+<!-- Filtering Form -->
+<form style="margin-left: 10rem; margin-top: 10rem;" th:action="@{/maps}" method="get" class="filter-form">
+    <label for="genre">Filter by Genre:</label>
+    <select name="genre" id="genre" onchange="this.form.submit()">
+        <option value="">All</option>
+        <option value="CULTURAL_TOURS" th:selected="${param.genre == 'CULTURAL_TOURS'}">Cultural Tours</option>
+        <option value="NATURE_TRAILS" th:selected="${param.genre == 'NATURE_TRAILS'}">Nature Trails</option>
+        <option value="ROAD_TRIP_ROUTES" th:selected="${param.genre == 'ROAD_TRIP_ROUTES'}">Road Trip Routes</option>
+        <option value="PHOTOGRAPHER_PARADISE" th:selected="${param.genre == 'PHOTOGRAPHER_PARADISE'}">Photographer’s Paradise</option>
+    </select>
+</form>
+
+<div class="grid-container">
+    <div class="card" th:each="map : ${maps}">
+        <div class="image-container">
+            <img th:src="@{/images/{img}(img=${map.mapImage})}" th:alt="${map.mapTitle}" />
+        </div>
+        <div class="details">
+            <h3 th:text="${map.mapTitle + ' - $' + map.price}">Map Title</h3>
+            <p th:text="${map.mapDescription}">Map Description</p>
+        </div>
+        <form th:action="@{/marketplace/add}" method="post">
+            <input type="hidden" name="mapId" th:value="${map.id}" />
+            <input type="number" name="price" th:value="${map.price}" min="0" />
+            <button type="submit">List on Marketplace</button>
+        </form>
+    </div>
+</div>
+
+<script type="module" src="../js/navbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Nuna</title>
+    <link rel="stylesheet" th:href="@{/static/register.css}" />
+    <style>
+        .error-message {
+            color: #f0ad4e;
+            font-size: 12px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="image-section"></div>
+    <div class="form-section">
+        <h1>Create Your Explorer Account</h1>
+        <form id="signupForm" th:action="@{/register}" th:object="${explorer}" method="post">
+
+            <!-- Full Name Field -->
+            <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    th:field="*{name}"
+                    placeholder="Full Name"
+                    required
+            />
+            <div class="error-message" id="nameError">Please enter your full name.</div>
+
+            <!-- Email Field -->
+            <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    th:field="*{username}"
+                    placeholder="Email Address"
+                    required
+            />
+            <div class="error-message" id="emailError">Please enter a valid email address.</div>
+
+            <!-- Password Field -->
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    th:field="*{password}"
+                    placeholder="Create a Password"
+                    required
+            />
+            <div class="error-message" id="passwordError">Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.</div>
+
+            <!-- Preferred Contact Method -->
+            <fieldset class="contact-method">
+                <legend>Preferred Contact Method</legend>
+                <label>
+                    <input type="radio" name="contact" value="email" />
+                    Email
+                </label>
+                <label>
+                    <input type="radio" name="contact" value="phone" />
+                    Phone
+                </label>
+            </fieldset>
+
+            <!-- Terms and Conditions -->
+            <label>
+                <input type="checkbox" id="terms" name="terms" required />
+                I agree to the terms and conditions
+            </label>
+            <div class="error-message" id="termsError">You must agree to the terms and conditions.</div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="register-btn">Sign Up</button>
+        </form>
+        <p>Already a member? <a th:href="@{/login}">Log in</a></p>
+    </div>
+</div>
+
+<script src="../js/validation.js"></script>
+</body>
+</html>
