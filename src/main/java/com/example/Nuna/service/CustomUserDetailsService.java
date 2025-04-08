@@ -4,8 +4,6 @@ import com.example.Nuna.model.AdminUser;
 import com.example.Nuna.model.Explorer;
 import com.example.Nuna.repository.AdminUserRepository;
 import com.example.Nuna.repository.ExplorerRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,9 +26,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("Attempting login for username: " + username);
         //Try to find the user as an Explorer
         Optional<Explorer> explorer = explorerRepository.findByUsername(username);
         if (explorer.isPresent()) {
+            System.out.println("Found Explorer" + explorer.get().getUsername());
             return new org.springframework.security.core.userdetails.User(
                     explorer.get().getUsername(),
                     explorer.get().getPassword(),
@@ -41,6 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         //Try to find the user as an AdminUser
         Optional<AdminUser> adminUser = adminUserRepository.findByUsername(username);
         if (adminUser.isPresent()) {
+            System.out.println("Found AdminUser" + adminUser.get().getUsername());
             return new org.springframework.security.core.userdetails.User(
                     adminUser.get().getUsername(),
                     adminUser.get().getPassword(),
@@ -48,6 +49,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             );
         }
 
+        System.out.println("User Not Found" + username);
         throw new UsernameNotFoundException("User not found with username: " + username);
     }
 }

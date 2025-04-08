@@ -7,6 +7,7 @@ import com.example.Nuna.model.Marketplace;
 import com.example.Nuna.repository.ExplorerRepository;
 import com.example.Nuna.repository.MapRepository;
 import com.example.Nuna.repository.MarketplaceRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,13 +27,8 @@ public class ExplorerService {
     @Autowired
     private MarketplaceRepository marketplaceRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     public Explorer registerExplorer(Explorer explorer) {
-        //encode the password before saving
-        explorer.setPassword(passwordEncoder.encode(explorer.getPassword()));
-
         Explorer savedExplorer = explorerRepository.save(explorer);
 
         //Create and save a new Marketplace for the registered Explorer

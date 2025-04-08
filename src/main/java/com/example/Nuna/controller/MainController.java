@@ -7,6 +7,7 @@ import com.example.Nuna.service.ExplorerService;
 import com.example.Nuna.service.MapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,9 @@ public class MainController {
 
     @Autowired
     private MapService mapService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //Show the home page
     @GetMapping("/")
@@ -57,7 +61,7 @@ public class MainController {
             return "register";
         }
 
-        explorer.setPassword(new BCryptPasswordEncoder().encode(explorer.getPassword()));
+        explorer.setPassword(passwordEncoder.encode(explorer.getPassword()));
         explorerService.registerExplorer(explorer);
         return "redirect:/login";
     }
